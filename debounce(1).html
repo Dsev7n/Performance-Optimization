@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>获取输入框提示的防抖栗子</title>
+</head>
+<body>
+    <input type="text" id="input">
+    <script>
+        // var timer = null;    写在这里会污染全局作用域
+        document.querySelector('#input').addEventListener('keyup', function(){
+            // if(this.value == '') return;      
+            // var _this = this;          用普通函数写就得增加这个语句
+            if(this.timer)clearTimeout(this.timer);  //如果没有清除定时器，就会每次都触发函数
+            this.timer = setTimeout(() => {   //箭头函数会保留this原本的值，而普通函数的this会指向window
+                console.log(this.value);
+            },300)
+        },false);
+    </script>
+</body>
+</html>

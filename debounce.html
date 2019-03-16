@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>onmousemove事件防抖</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #app {
+            height: 200px;
+            background: pink;
+        }
+    </style>
+</head>
+<body>
+    <!--
+        需求：当鼠标在app上移动时，h2内容发生变化
+
+             优化这个事件的性能
+      -->
+    <div id="app">
+
+    </div>
+    <h2></h2>
+    <script>
+        var app = document.getElementById('app');
+        var h2 = document.querySelector('h2');
+        var cont = 0;
+        // app.onmousemove = function(ev) {
+                // console.log(this);   //这里的this指向app
+                //console.log(ev);    事件对象是mousemove
+        //     h2.innerHTML = cont;    
+        //     cont++;
+        // }
+
+
+
+        //封装的防抖函数
+        function debounce(func,wait) {
+            // var timeout;
+            return function() {   //封装的防抖函数，必须返回原本要执行的功能函数
+                var args = arguments;   //类数组对象
+                console.log(args);      //args是事件对象，为什么？
+                if (this.timeout)clearTimeout(this.timeout);
+                this.timeout = setTimeout(() => {
+                    func.apply(this, args);
+                }, wait);    
+            }
+        }
+
+
+        //DOM0级事件处理程序
+        app.onmousemove = debounce(function(ev) {
+            // console.log(this);  
+            h2.innerHTML = cont;
+            cont++;
+        }, 500)
+
+
+        /* 
+            DOM2级事件处理程序，
+            这种方法其实跟上面一样的，只是上面有封装一个防抖函数
+             这里是没封装
+        */
+        // app.addEventListener('mousemove', function(){
+        //     if (this.timer) clearTimeout(this.timer);
+        //     this.timer = setTimeout(() => {
+        //         h2.innerHTML = cont;
+        //         cont++;
+        //     },500);
+        // },false);  //false表示在冒泡阶段被处理
+</script>
+</body>
+</html>
